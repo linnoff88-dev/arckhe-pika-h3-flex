@@ -1,0 +1,15 @@
+integrated_multimodal_description: [Shot 1] Cinematic documentary shot at golden hour on a cattle ranch in the Brazilian pampa. An old gaucho in a wide-brimmed hat and poncho sits on a wooden fence, sips chimarrao from a gourd, then lifts his eyes as a herd of horses gallops across the green field behind him, dust glowing in the low sun. The camera slowly pushes in on his calm face. Natural colors, shallow depth of field.
+
+overall_soundscape: steady wind over open grassland, the rumble of hooves growing louder, a horse neighing in the distance, the soft slurp of the chimarrao straw.
+
+integrated_multimodal_description: [Shot 1] Realistic industrial shot inside a clean robotics workshop. A sleek humanoid robot with a white and black body, similar to a modern Optimus-style design, stands at a workbench and carefully places a small glass cube on top of a stack of cubes, its fingers moving precisely. Its head turns toward the camera. Cool neutral lighting, shallow depth of field, slow dolly to the right.
+
+overall_soundscape: quiet hum of machines, soft servo whirs with each finger movement, a light glass click as the cube lands, a faint air ventilation sound.
+
+integrated_multimodal_description: [Shot 1] Dramatic weather footage of a severe thunderstorm over a coastal city in southern Brazil at dusk. A dark shelf cloud rolls over tall buildings by the sea, heavy rain sweeps across the street, palm trees bend in the wind, and a bright lightning bolt strikes the sea in the distance. Wide shot from a balcony, handheld, realistic.
+
+overall_soundscape: roaring wind, heavy rain hammering on the balcony railing, a sharp crack of thunder right after the lightning, distant car alarms.
+
+integrated_multimodal_description: [Shot 1] Cozy home studio at night. A middle-aged Brazilian man with glasses sits in front of a large monitor showing a video timeline, he presses a key and leans back smiling as a colorful generated video starts playing on the screen, the light of the screen on his face. Warm practical lights, slow push-in.
+
+overall_soundscape: soft keyboard click, the faint music from the video on the monitor, a quiet room tone, the man laughs briefly.

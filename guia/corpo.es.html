@@ -1,0 +1,178 @@
+<nav><div class="wrap">
+  <a class="brand" href="#top"><span class="emoji">🎬</span> Pika H3 Flex en DGX</a>
+  <span class="sep">|</span>
+  <span class="clubpro">
+    <a class="inema" href="https://inema.club" target="_blank" rel="noopener">INEMA.CLUB</a>
+    <span class="sep">-</span>
+    <a class="pro" href="https://inema.pro" target="_blank" rel="noopener">PRO</a>
+  </span>
+  <div class="links">
+    <a class="sec" href="#oque">Qué es</a>
+    <a class="sec" href="#fluxo">Cómo funciona</a>
+    <a class="sec" href="#guia">Guía de uso</a>
+    <a class="sec" href="#memoria">Memoria</a>
+    <a class="sec" href="#exemplos">Ejemplos</a>
+    <span class="lang"><a href="../">PT</a><a href="../en/">EN</a><a class="on" href="./">ES</a></span>
+    <button class="tgl" id="themeToggle" aria-label="Alternar tema" title="Alternar tema">🌙</button>
+    <a class="btn" href="https://github.com/inematds/pika-h3-flex" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</div></nav>
+
+<header class="hero" id="top">
+  <div class="glow"></div>
+  <div class="wrap">
+    <div>
+      <span class="chip">Video con sonido · pesos abiertos · 6 pasos</span>
+      <h1>Pika H3 Flex funcionando en tu <span class="amb">DGX</span></h1>
+      <p class="lead">El texto se convierte en video con audio sincronizado, en tu máquina, sin nube y sin créditos. Aquí está la receta que funcionó, incluida la trampa de memoria que casi bloquea la computadora.</p>
+      <div class="cta">
+        <a class="btn" href="#guia">Empezar la guía</a>
+        <a class="btn ghost" href="https://github.com/inematds/pika-h3-flex" target="_blank" rel="noopener">Ver en GitHub</a>
+      </div>
+    </div>
+    <figure><img src="../assets/banner-es.jpg" alt="Banner: Pika Flex local — video con sonido en 6 pasos, en tu DGX"></figure>
+  </div>
+</header>
+
+<section id="resumo" class="resumo"><div class="wrap">
+  <span class="chip">En resumen</span>
+  <p>Este proyecto es un kit para ejecutar Pika H3 Flex en tu propia computadora. Flex es un modelo abierto de Pika que transforma un texto en video con sonido sincronizado, en solo 6 pasos. No es un modelo completo: son dos adaptadores (LoRA, un «ajuste» de ~2 GB) que se acoplan a MiniMax H3. Sirve para quienes tienen una GPU grande, como NVIDIA DGX Spark, y quieren generar video sin pagar por cada clip. Para usarlo, necesitas ComfyUI con los modelos de H3; el kit incluye los comandos, el generador y la protección de memoria.</p>
+</div></section>
+
+<section id="oque"><div class="wrap">
+  <span class="chip">Qué es</span>
+  <h2>Video y sonido en la misma pasada, en casa</h2>
+  <p class="sub">Pika publicó los pesos de Flex el 29/10/2026. Los descargamos, configuramos y probamos en un DGX Spark (GB10, 128 GB de memoria unificada).</p>
+  <figure style="margin:0 0 26px;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -30px #000"><img src="../assets/banner-grade-es.jpg" alt="Banner con los 6 puntos del kit: 6 pasos, video + audio, ComfyUI, memoria unificada, protección de memoria, ejemplos reales" loading="lazy" style="width:100%;display:block"></figure>
+  <div class="grid g3">
+    <div class="card"><h3>⚡ 6 pasos, no 50</h3><p>Pika entrenó Flex para generar en 6 etapas de eliminación de ruido. En la práctica, la generación en sí tarda unos 30 s en un clip corto.</p></div>
+    <div class="card"><h3>🔊 Video con sonido</h3><p>La misma pasada genera imagen y audio: viento, pasos, salpicaduras, música. Describes la escena y el sonido en el prompt.</p></div>
+    <div class="card"><h3>🏠 Local y abierto</h3><p>Se ejecuta en ComfyUI en tu máquina. Sin créditos por clip, sin cola en la nube. La versión abierta llega hasta 768p.</p></div>
+  </div>
+</div></section>
+
+<section id="fluxo"><div class="wrap">
+  <span class="chip">Cómo funciona</span>
+  <h2>Del texto al MP4</h2>
+  <p class="sub"><code>gera.py</code> envía a ComfyUI el mismo grafo de la plantilla oficial de Flex, con los nombres de los modelos que tienes.</p>
+  <div class="flow">
+    <span>Prompt (escena + sonido)</span><span class="arr">→</span>
+    <span>Qwen3-VL lee el texto</span><span class="arr">→</span>
+    <span>MiniMax H3 + LoRA Flex</span><span class="arr">→</span>
+    <span>6 sigmas + lcm</span><span class="arr">→</span>
+    <span>VAE de video y de audio</span><span class="arr">→</span>
+    <span>MP4 con sonido</span>
+  </div>
+  <div class="grid g3" style="margin-top:22px">
+    <div class="card"><h3>Sigmas manuales</h3><p><code>1.0, 0.972973, 0.923077, 0.8, 0.571429, 0.333333, 0.0</code>. Elegir «6 pasos» en cualquier sampler no reproduce Flex.</p></div>
+    <div class="card"><h3>Sampler lcm</h3><p>Ruido nuevo en cada paso, sin CFG. LoRA con fuerza 1.0, como indica Pika.</p></div>
+    <div class="card"><h3>Cuadros 17k + 5</h3><p>H3 necesita 73 cuadros (3 s) o 124 (5 s) a 24 fps. <code>--segundos</code> hace el cálculo.</p></div>
+  </div>
+</div></section>
+
+<section id="pre"><div class="wrap">
+  <span class="chip">Requisitos previos</span>
+  <h2>Qué debe estar listo</h2>
+  <p class="sub">Si MiniMax H3 ya se ejecuta en tu máquina, solo falta descargar los dos LoRA de Flex.</p>
+  <div class="grid g3">
+    <div class="card"><h3>GPU con ~60 GB libres</h3><p>Probado en DGX Spark (GB10, 128 GB unificados). En una tarjeta más pequeña, usa versiones cuantizadas más pequeñas.</p><pre><span class="c"># comprueba la memoria libre</span>
+free -g</pre></div>
+    <div class="card"><h3>ComfyUI reciente</h3><p>Con los nodos nativos de H3: <code>MiniMaxH3ImageToVideo</code>, <code>ManualSigmas</code>, <code>SamplerCustomAdvanced</code>. Probado en la versión 0.33.0.</p><pre><span class="c"># en la carpeta de ComfyUI</span>
+git pull</pre></div>
+    <div class="card"><h3>Modelos de MiniMax H3</h3><p>En <code>models/</code>: <code>minimax_h3_fl2va_pruned_fp8_scaled</code> (21 GB), <code>qwen3vl_32b_minimax_h3_int8_convrot</code> (27 GB), VAEs de video y audio (5,8 GB).</p><pre><span class="c"># lista lo que tienes</span>
+ls models/diffusion_models models/text_encoders models/vae</pre></div>
+  </div>
+</div></section>
+
+<section id="guia"><div class="wrap">
+  <span class="chip">Guía de uso · paso a paso</span>
+  <h2>Desde cero hasta el primer clip</h2>
+  <p class="sub">Los comandos de abajo son los que ejecutamos aquí. Cambia las rutas por las tuyas.</p>
+
+  <div class="step"><div class="b">1</div><div>
+    <h3>Descarga el kit</h3>
+    <p>Scripts, workflows y ejemplos.</p>
+<pre><span class="k">git clone https://github.com/inematds/pika-h3-flex && cd pika-h3-flex</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">2</div><div>
+    <h3>Descarga los LoRA de Flex (formato ComfyUI)</h3>
+    <p>Son dos archivos de ~2 GB. El hash comprueba que se hayan descargado completos.</p>
+<pre><span class="k">hf download Pika-Labs/Pika-H3-Flex --include 'comfy/*' --local-dir pika-flex</span>
+<span class="k">cd pika-flex/comfy && sha256sum -c SHA256SUMS</span>   <span class="c"># ambos: OK</span>
+<span class="k">mv loras/pika_h3_flex_*_comfy_bf16.safetensors /caminho/do/ComfyUI/models/loras/</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">3</div><div>
+    <h3>Inicia ComfyUI con las opciones de memoria</h3>
+    <p>El script ya pasa las tres opciones que evitan duplicar los pesos. Ajusta <code>COMFY_DIR</code> y <code>VENV</code>.</p>
+<pre><span class="k">COMFY_DIR=~/ComfyUI VENV=~/ComfyUI/venv ./scripts/comfyui-start.sh</span>
+<span class="c"># inicia en el puerto 8299 con --disable-dynamic-vram --disable-pinned-memory --cache-none</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">4</div><div>
+    <h3>Activa la protección de memoria</h3>
+    <p>Revisa la memoria libre de la máquina cada 3 s y detiene ComfyUI antes de que se bloquee.</p>
+<pre><span class="k">./scripts/guarda.sh guarda.log 8 &</span>   <span class="c"># 8 = límite en GB</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">5</div><div>
+    <h3>Genera</h3>
+    <p>Un prompt o un archivo con varios (uno por bloque). Los modelos se cargan una sola vez.</p>
+<pre><span class="k">python3 scripts/gera.py --prompt "integrated_multimodal_description: [Shot 1] ... overall_soundscape: ..."</span>
+<span class="k">python3 scripts/gera.py --arquivo exemplos/prompts.txt --largura 1344 --altura 768 --segundos 5</span>
+<span class="c"># salida: ComfyUI/output/pika_flex/clip01_00001_.mp4 ...</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">6</div><div>
+    <h3>Apaga</h3>
+    <p>ComfyUI se ejecuta dentro de un alcance de systemd.</p>
+<pre><span class="k">systemctl --user stop comfyui-h3.scope</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">+</div><div>
+    <h3>¿Prefieres la interfaz de ComfyUI?</h3>
+    <p>Abre los workflows de <code>workflows/</code> (t2v, fl2va, ref2va): son las plantillas oficiales de Flex con los nombres adaptados a los modelos de la tabla anterior.</p>
+<pre><span class="k">workflows/pika_flex_t2v_ui.json</span>   <span class="c"># arrástralo a la interfaz de ComfyUI</span></pre>
+  </div></div>
+</div></section>
+
+<section id="memoria"><div class="wrap">
+  <span class="chip">La trampa</span>
+  <h2>La memoria unificada engaña</h2>
+  <p class="sub">En DGX Spark, la GPU y la CPU comparten la misma memoria. Eso lo cambió todo en la prueba.</p>
+  <div class="grid g3">
+    <div class="card"><h3>💥 Primera prueba: 0 GB libres</h3><p>El límite de systemd marcaba 41 GB y aun así la máquina se quedó sin memoria. El sistema cerró ComfyUI. El límite no detecta la parte de la GPU.</p></div>
+    <div class="card"><h3>🔍 La causa</h3><p>ComfyUI guardaba los pesos dos veces: una en la RAM y otra en la GPU. Solo al cargarlos superó los 80 GB.</p></div>
+    <div class="card"><h3>✅ La solución</h3><p><code>--disable-dynamic-vram --disable-pinned-memory --cache-none</code> + <code>guarda.sh</code>. Así quedó memoria disponible incluso con otro servicio de imágenes activo.</p></div>
+  </div>
+  <div class="card" style="margin-top:18px"><h3>⚠️ Ejecuta solo en la GPU</h3><p>En un lote de clips de 1344×768, mientras se ejecutaban otros renders de video, la GPU se quedó sin memoria y el servidor se bloqueó. <code>guarda.sh</code> revisa la memoria libre de la máquina, pero no evita que se agote la memoria del controlador de la GPU. Antes de generar, cierra los demás trabajos pesados de GPU y empieza con el tamaño pequeño (832×480).</p></div>
+</div></section>
+
+<section id="exemplos"><div class="wrap">
+  <span class="chip">Ejemplos</span>
+  <h2>Generados en DGX, con sonido</h2>
+  <p class="sub">Haz clic para escuchar. Hay más prompts listos (todavía no generados aquí) en <code>exemplos/prompts.txt</code>.</p>
+  <div class="ex">
+<!--EXEMPLOS-->
+  </div>
+</div></section>
+
+<section id="roadmap"><div class="wrap">
+  <span class="chip">Límites y próximos pasos</span>
+  <h2>Lo que la versión abierta no hace</h2>
+  <p class="sub">Medido el 09/11/2026.</p>
+  <div class="phase"><div class="tag">Límite</div><div class="d"><strong>Hasta 768p</strong><span>El escalado a 1080p, 2K y 4K, la separación del audio en pistas y la mejora automática del prompt solo están disponibles en el servicio pago de Pika.</span></div></div>
+  <div class="phase"><div class="tag">Tiempo</div><div class="d"><strong>Lo que tarda es la carga</strong><span>Clip de 3 s en 832×480: 341 s en total, de los cuales ~30 s son de generación. Generar varios en la misma llamada reutiliza los modelos cargados.</span></div></div>
+  <div class="phase"><div class="tag">Próximo</div><div class="d"><strong>1344×768 y 5 s con la GPU libre</strong><span>Los prompts de <code>exemplos/prompts.txt</code> todavía se generarán en el tamaño más grande, con la máquina sin otros renders.</span></div></div>
+  <div class="phase"><div class="tag">Próximo</div><div class="d"><strong>Personaje y primer cuadro</strong><span>Los modos ref2va (imágenes de referencia) y fl2va (primer y último cuadro) ya tienen workflow; falta probarlos en DGX.</span></div></div>
+</div></section>
+
+<footer>
+  <div class="wrap">
+    <div class="pill">Pika H3 Flex</div><div class="pill">MiniMax H3</div><div class="pill">ComfyUI</div><div class="pill">DGX Spark</div>
+    <p style="margin-top:18px">Pika H3 Flex en DGX · los LoRA son de Pika (licencia comunitaria de MiniMax H3) ·
+      <a href="https://github.com/inematds/pika-h3-flex">inematds/pika-h3-flex</a> ·
+      <a href="https://inema.club">INEMA.CLUB</a></p>
+  </div>
+</footer>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pika H3 Flex no DGX — vídeo com som em 6 passos, local</title>
+<meta name="description" content="Kit para rodar o Pika H3 Flex (vídeo com áudio, pesos abertos, 6 passos) no ComfyUI de um DGX Spark: download, memória unificada, gerador e exemplos.">
+<link rel="alternate" hreflang="pt-BR" href="https://inematds.github.io/pika-h3-flex/guia/">
+<link rel="alternate" hreflang="en" href="https://inematds.github.io/pika-h3-flex/guia/en/">
+<link rel="alternate" hreflang="es" href="https://inematds.github.io/pika-h3-flex/guia/es/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c0c10; --bg2:#14141b; --card:#16161e; --line:#272730;
+    --txt:#e9e9ee; --mut:#9a9aa6; --amb:#E2A23B; --amb2:#f0c070; --sky:#38bdf8; --pro:#cbd5e1;
+    color-scheme:dark;
+  }
+  body.light{
+    --bg:#f6f7f9; --bg2:#eceef2; --card:#ffffff; --line:#e1e3ea;
+    --txt:#1a1a22; --mut:#5b5b68; --amb:#b9791d; --amb2:#a16207; --sky:#0369a1; --pro:#b45309;
+    color-scheme:light;
+  }
+  body.light .hero .glow{opacity:.5}
+  body.light pre{background:#0e0e14;color:#d6d6e0}
+  body.light pre .c{color:#8a8a98}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.65 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:Sora,sans-serif;line-height:1.15;margin:0}
+  a{color:var(--amb);text-decoration:none}
+  code,pre{font-family:"JetBrains Mono",monospace}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 22px}
+  .mut{color:var(--mut)} .amb{color:var(--amb)}
+  .chip{display:inline-block;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--amb);font-weight:600;font-family:Sora}
+  nav{position:sticky;top:0;z-index:30;backdrop-filter:blur(12px);background:rgba(12,12,16,.78);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;gap:22px;height:60px}
+  nav .brand{display:flex;align-items:center;gap:8px;font-family:Sora;font-weight:800;letter-spacing:-.02em;color:var(--amb)}
+  nav .brand .emoji{font-size:1.25rem}
+  nav .sep{color:var(--mut);opacity:.45}
+  nav .inema{color:var(--sky);font-weight:600;font-size:.88rem;font-family:Sora}
+  nav .inema:hover{filter:brightness(1.15)}
+  nav .pro{color:var(--pro);font-weight:600;font-size:.88rem;font-family:Sora}
+  nav .pro:hover{filter:brightness(1.15)}
+  nav .clubpro{display:inline-flex;align-items:center;gap:6px}
+  nav .links{margin-left:auto;display:flex;align-items:center;gap:20px;font-size:.92rem}
+  nav .links a.sec{color:var(--mut)} nav .links a.sec:hover{color:var(--txt)}
+  .lang{display:inline-flex;gap:2px;font-family:Sora;font-size:.78rem}
+  .lang a{color:var(--mut);padding:.2em .45em;border-radius:6px} .lang a.on{color:var(--amb);background:rgba(226,162,59,.12)}
+  .tgl{background:var(--bg2);border:1px solid var(--line);color:var(--txt);width:38px;height:38px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:1.05rem}
+  .tgl:hover{border-color:var(--amb)}
+  .btn{display:inline-block;background:var(--amb);color:#1a1206;font-weight:600;padding:.6em 1.05em;border-radius:10px;font-family:Sora}
+  .btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}
+  @media(max-width:760px){nav .links a.sec{display:none}}
+  @media(max-width:520px){nav .wrap{gap:8px;padding:8px 14px;height:auto;flex-wrap:wrap} nav .links{gap:8px;margin-left:0;width:100%;justify-content:space-between} nav .btn{padding:.45em .7em;font-size:.82rem} .tgl{width:34px;height:34px}}
+  .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+  .hero .glow{position:absolute;inset:-40% -20% auto auto;width:70%;height:600px;background:radial-gradient(closest-side,rgba(226,162,59,.22),transparent 70%);pointer-events:none}
+  .hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:74px 22px}
+  .hero h1{font-size:clamp(2.2rem,5vw,3.5rem);font-weight:800;letter-spacing:-.025em}
+  .hero p.lead{font-size:1.18rem;color:var(--mut);margin:1.1em 0 1.6em;max-width:34ch}
+  .hero .cta{display:flex;gap:12px;flex-wrap:wrap}
+  .hero figure{margin:0;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -30px #000}
+  .hero figure img{width:100%;height:auto;display:block}
+  .resumo{padding:38px 0 34px;border-bottom:1px solid var(--line)}
+  .resumo p{font-size:1.12rem;line-height:1.7;max-width:74ch;margin:.55em 0 0}
+  @media(max-width:780px){.hero .wrap{grid-template-columns:1fr;padding:48px 22px}}
+  section{padding:62px 0;border-bottom:1px solid var(--line)}
+  section h2{font-size:clamp(1.5rem,3.4vw,2.1rem);font-weight:800;letter-spacing:-.02em}
+  section .sub{color:var(--mut);margin:.6em 0 2em;max-width:62ch}
+  .grid{display:grid;gap:16px}
+  .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)} .g2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:820px){.g3,.g4{grid-template-columns:1fr 1fr}}
+  @media(max-width:540px){.g2,.g3,.g4{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .card h3{font-size:1.05rem;margin-bottom:.4em}
+  .card p{color:var(--mut);font-size:.92rem;margin:0}
+  .num{display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center;border-radius:8px;background:rgba(226,162,59,.14);color:var(--amb);font-family:Sora;font-weight:800;font-size:.9rem;margin-bottom:.7em}
+  .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+  .flow span{background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:.45em .9em;font-size:.85rem;font-family:Sora;font-weight:600}
+  .flow .arr{color:var(--amb);border:none;background:none;padding:0 .1em}
+  pre{background:#0a0a0e;border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;font-size:.86rem;line-height:1.6;color:#d6d6e0}
+  pre .c{color:#6f6f7c} pre .k{color:var(--amb2)} pre .s{color:#9ece6a}
+  .step{display:grid;grid-template-columns:46px minmax(0,1fr);gap:16px;margin-bottom:26px}
+  .step>div,.card{min-width:0}
+  p code,li code,td code{overflow-wrap:anywhere}
+  .step .b{width:46px;height:46px;border-radius:12px;background:var(--amb);color:#1a1206;font-family:Sora;font-weight:800;font-size:1.25rem;display:flex;align-items:center;justify-content:center}
+  .step h3{font-size:1.12rem;margin-bottom:.3em}
+  .step p{color:var(--mut);margin:.2em 0 .7em}
+  .ex{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:680px){.ex{grid-template-columns:1fr}}
+  .ex figure{margin:0;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+  .ex figure img{width:100%;height:auto;display:block}
+  .ex figcaption{padding:12px 14px;font-size:.88rem;color:var(--mut);background:var(--card)}
+  .phase{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line)}
+  .phase:last-child{border:none}
+  .phase .tag{flex:0 0 92px;font-family:Sora;font-weight:800;color:var(--amb)}
+  .phase .d strong{display:block;margin-bottom:.2em}
+  .phase .d span{color:var(--mut);font-size:.92rem}
+  footer{padding:46px 0;text-align:center;color:var(--mut);font-size:.9rem}
+  .pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:.3em .8em;font-size:.78rem;color:var(--mut);margin:0 4px}
+  .ex video{width:100%;display:block;border-radius:12px;background:#000}
+  code{font-family:'JetBrains Mono',monospace;font-size:.88em;color:var(--amb)}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <a class="brand" href="#top"><span class="emoji">🎬</span> Pika H3 Flex no DGX</a>
+  <span class="sep">|</span>
+  <span class="clubpro">
+    <a class="inema" href="https://inema.club" target="_blank" rel="noopener">INEMA.CLUB</a>
+    <span class="sep">-</span>
+    <a class="pro" href="https://inema.pro" target="_blank" rel="noopener">PRO</a>
+  </span>
+  <div class="links">
+    <a class="sec" href="#oque">O que é</a>
+    <a class="sec" href="#fluxo">Como funciona</a>
+    <a class="sec" href="#guia">Guia de uso</a>
+    <a class="sec" href="#memoria">Memória</a>
+    <a class="sec" href="#exemplos">Exemplos</a>
+    <span class="lang"><a class="on" href="./">PT</a><a href="en/">EN</a><a href="es/">ES</a></span>
+    <button class="tgl" id="themeToggle" aria-label="Alternar tema" title="Alternar tema">🌙</button>
+    <a class="btn" href="https://github.com/inematds/pika-h3-flex" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</div></nav>
+
+<header class="hero" id="top">
+  <div class="glow"></div>
+  <div class="wrap">
+    <div>
+      <span class="chip">Vídeo com som · pesos abertos · 6 passos</span>
+      <h1>O Pika H3 Flex rodando no seu <span class="amb">DGX</span></h1>
+      <p class="lead">Texto vira vídeo com áudio sincronizado, na sua máquina, sem nuvem e sem crédito. Aqui está a receita que funcionou, incluindo a armadilha de memória que quase travou o computador.</p>
+      <div class="cta">
+        <a class="btn" href="#guia">Começar o guia</a>
+        <a class="btn ghost" href="https://github.com/inematds/pika-h3-flex" target="_blank" rel="noopener">Ver no GitHub</a>
+      </div>
+    </div>
+    <figure><img src="assets/banner.jpg" alt="Banner: Pika Flex local — vídeo com som em 6 passos, no seu DGX"></figure>
+  </div>
+</header>
+
+<section id="resumo" class="resumo"><div class="wrap">
+  <span class="chip">Em resumo</span>
+  <p>Este projeto é um kit para rodar o Pika H3 Flex no seu próprio computador. O Flex é um modelo aberto da Pika que transforma um texto em vídeo com som sincronizado, em só 6 passos. Ele não é um modelo inteiro: são dois adaptadores (LoRA, um "ajuste" de ~2 GB) que encaixam no MiniMax H3. Serve para quem tem uma GPU grande, como o NVIDIA DGX Spark, e quer gerar vídeo sem pagar por clipe. Para usar, você precisa do ComfyUI com os modelos do H3; o kit traz os comandos, o gerador e a proteção de memória.</p>
+</div></section>
+
+<section id="oque"><div class="wrap">
+  <span class="chip">O que é</span>
+  <h2>Vídeo e som no mesmo passe, em casa</h2>
+  <p class="sub">A Pika liberou os pesos do Flex em 29/10/2026. A gente baixou, configurou e testou num DGX Spark (GB10, 128 GB de memória unificada).</p>
+  <figure style="margin:0 0 26px;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -30px #000"><img src="assets/banner-grade.jpg" alt="Banner com os 6 pontos do kit: 6 passos, vídeo + áudio, ComfyUI, memória unificada, guarda de memória, exemplos reais" loading="lazy" style="width:100%;display:block"></figure>
+  <div class="grid g3">
+    <div class="card"><h3>⚡ 6 passos, não 50</h3><p>A Pika treinou o Flex para gerar em 6 etapas de limpeza de ruído. Na prática, a geração em si leva cerca de 30 s num clipe curto.</p></div>
+    <div class="card"><h3>🔊 Vídeo com som</h3><p>O mesmo passe gera imagem e áudio: vento, passos, splash, música. Você descreve a cena e o som no prompt.</p></div>
+    <div class="card"><h3>🏠 Local e aberto</h3><p>Roda no ComfyUI da sua máquina. Sem crédito por clipe, sem fila na nuvem. A versão aberta vai até 768p.</p></div>
+  </div>
+</div></section>
+
+<section id="fluxo"><div class="wrap">
+  <span class="chip">Como funciona</span>
+  <h2>Do texto ao MP4</h2>
+  <p class="sub">O <code>gera.py</code> manda para o ComfyUI o mesmo grafo do template oficial do Flex, com os nomes dos modelos que você tem.</p>
+  <div class="flow">
+    <span>Prompt (cena + som)</span><span class="arr">→</span>
+    <span>Qwen3-VL lê o texto</span><span class="arr">→</span>
+    <span>MiniMax H3 + LoRA Flex</span><span class="arr">→</span>
+    <span>6 sigmas + lcm</span><span class="arr">→</span>
+    <span>VAE de vídeo e de áudio</span><span class="arr">→</span>
+    <span>MP4 com som</span>
+  </div>
+  <div class="grid g3" style="margin-top:22px">
+    <div class="card"><h3>Sigmas manuais</h3><p><code>1.0, 0.972973, 0.923077, 0.8, 0.571429, 0.333333, 0.0</code>. Escolher "6 passos" num sampler qualquer não reproduz o Flex.</p></div>
+    <div class="card"><h3>Sampler lcm</h3><p>Ruído novo a cada passo, sem CFG. LoRA com força 1.0, como manda a Pika.</p></div>
+    <div class="card"><h3>Quadros 17k + 5</h3><p>O H3 quer 73 quadros (3 s) ou 124 (5 s) a 24 fps. O <code>--segundos</code> faz a conta.</p></div>
+  </div>
+</div></section>
+
+<section id="pre"><div class="wrap">
+  <span class="chip">Pré-requisitos</span>
+  <h2>O que precisa estar pronto</h2>
+  <p class="sub">Se o MiniMax H3 já roda na sua máquina, falta só baixar os dois LoRAs do Flex.</p>
+  <div class="grid g3">
+    <div class="card"><h3>GPU com ~60 GB livres</h3><p>Testado no DGX Spark (GB10, 128 GB unificados). Em placa menor, use versões quantizadas menores.</p><pre><span class="c"># confira a memória livre</span>
+free -g</pre></div>
+    <div class="card"><h3>ComfyUI recente</h3><p>Com os nós nativos do H3: <code>MiniMaxH3ImageToVideo</code>, <code>ManualSigmas</code>, <code>SamplerCustomAdvanced</code>. Testado na 0.33.0.</p><pre><span class="c"># na pasta do ComfyUI</span>
+git pull</pre></div>
+    <div class="card"><h3>Modelos do MiniMax H3</h3><p>Em <code>models/</code>: <code>minimax_h3_fl2va_pruned_fp8_scaled</code> (21 GB), <code>qwen3vl_32b_minimax_h3_int8_convrot</code> (27 GB), VAEs de vídeo e de áudio (5,8 GB).</p><pre><span class="c"># liste o que você tem</span>
+ls models/diffusion_models models/text_encoders models/vae</pre></div>
+  </div>
+</div></section>
+
+<section id="guia"><div class="wrap">
+  <span class="chip">Guia de uso · passo a passo</span>
+  <h2>Do zero ao primeiro clipe</h2>
+  <p class="sub">Os comandos abaixo são os que rodaram aqui. Troque os caminhos pelos seus.</p>
+
+  <div class="step"><div class="b">1</div><div>
+    <h3>Baixe o kit</h3>
+    <p>Scripts, workflows e exemplos.</p>
+<pre><span class="k">git clone https://github.com/inematds/pika-h3-flex && cd pika-h3-flex</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">2</div><div>
+    <h3>Baixe os LoRAs do Flex (formato ComfyUI)</h3>
+    <p>São dois arquivos de ~2 GB. O hash confere se veio inteiro.</p>
+<pre><span class="k">hf download Pika-Labs/Pika-H3-Flex --include 'comfy/*' --local-dir pika-flex</span>
+<span class="k">cd pika-flex/comfy && sha256sum -c SHA256SUMS</span>   <span class="c"># os dois: OK</span>
+<span class="k">mv loras/pika_h3_flex_*_comfy_bf16.safetensors /caminho/do/ComfyUI/models/loras/</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">3</div><div>
+    <h3>Suba o ComfyUI com as opções de memória</h3>
+    <p>O script já passa as três opções que evitam os pesos em dobro. Ajuste <code>COMFY_DIR</code> e <code>VENV</code>.</p>
+<pre><span class="k">COMFY_DIR=~/ComfyUI VENV=~/ComfyUI/venv ./scripts/comfyui-start.sh</span>
+<span class="c"># sobe na porta 8299 com --disable-dynamic-vram --disable-pinned-memory --cache-none</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">4</div><div>
+    <h3>Ligue o guarda de memória</h3>
+    <p>Ele olha a memória livre da máquina a cada 3 s e derruba o ComfyUI antes de travar.</p>
+<pre><span class="k">./scripts/guarda.sh guarda.log 8 &</span>   <span class="c"># 8 = limite em GB</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">5</div><div>
+    <h3>Gere</h3>
+    <p>Um prompt ou um arquivo com vários (um por bloco). Os modelos carregam uma vez só.</p>
+<pre><span class="k">python3 scripts/gera.py --prompt "integrated_multimodal_description: [Shot 1] ... overall_soundscape: ..."</span>
+<span class="k">python3 scripts/gera.py --arquivo exemplos/prompts.txt --largura 1344 --altura 768 --segundos 5</span>
+<span class="c"># saída: ComfyUI/output/pika_flex/clip01_00001_.mp4 ...</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">6</div><div>
+    <h3>Desligue</h3>
+    <p>O ComfyUI roda dentro de um escopo do systemd.</p>
+<pre><span class="k">systemctl --user stop comfyui-h3.scope</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">+</div><div>
+    <h3>Prefere a tela do ComfyUI?</h3>
+    <p>Abra os workflows de <code>workflows/</code> (t2v, fl2va, ref2va): são os templates oficiais do Flex com os nomes trocados para os modelos da tabela acima.</p>
+<pre><span class="k">workflows/pika_flex_t2v_ui.json</span>   <span class="c"># arraste para a tela do ComfyUI</span></pre>
+  </div></div>
+</div></section>
+
+<section id="memoria"><div class="wrap">
+  <span class="chip">A armadilha</span>
+  <h2>Memória unificada engana</h2>
+  <p class="sub">No DGX Spark a GPU e a CPU dividem a mesma memória. Isso mudou tudo no teste.</p>
+  <div class="grid g3">
+    <div class="card"><h3>💥 1º teste: 0 GB livre</h3><p>O teto do systemd marcava 41 GB e mesmo assim a máquina zerou a memória. O sistema matou o ComfyUI. O teto não enxerga a parte da GPU.</p></div>
+    <div class="card"><h3>🔍 A causa</h3><p>O ComfyUI guardava os pesos duas vezes, uma na RAM e outra na GPU. Só no carregamento passou de 80 GB.</p></div>
+    <div class="card"><h3>✅ A solução</h3><p><code>--disable-dynamic-vram --disable-pinned-memory --cache-none</code> + o <code>guarda.sh</code>. Com isso sobrou folga até com outro serviço de imagem ligado.</p></div>
+  </div>
+  <div class="card" style="margin-top:18px"><h3>⚠️ Rode sozinho na GPU</h3><p>Num lote de clipes de 1344×768, rodando junto com outros renders de vídeo, a GPU ficou sem memória e o servidor travou. O <code>guarda.sh</code> olha a memória livre da máquina, mas não segura a falta de memória do driver da GPU. Antes de gerar, feche os outros trabalhos pesados de GPU e comece pelo tamanho pequeno (832×480).</p></div>
+</div></section>
+
+<section id="exemplos"><div class="wrap">
+  <span class="chip">Exemplos</span>
+  <h2>Gerados no DGX, com som</h2>
+  <p class="sub">Clique para ouvir. Mais prompts prontos (ainda não gerados aqui) em <code>exemplos/prompts.txt</code>.</p>
+  <div class="ex">
+    <figure><video src="assets/ex-pescador.mp4" poster="assets/ex-pescador.jpg" controls loop playsinline preload="none"></video><figcaption>Pescador jogando a rede ao amanhecer — 832×480, 3 s, com som de água e gaivotas (341 s no total)</figcaption></figure>
+  </div>
+</div></section>
+
+<section id="roadmap"><div class="wrap">
+  <span class="chip">Limites e próximos passos</span>
+  <h2>O que a versão aberta não faz</h2>
+  <p class="sub">Medido em 09/11/2026.</p>
+  <div class="phase"><div class="tag">Limite</div><div class="d"><strong>Até 768p</strong><span>Upscale para 1080p, 2K e 4K, separação do áudio em faixas e melhoria automática do prompt existem só no serviço pago da Pika.</span></div></div>
+  <div class="phase"><div class="tag">Tempo</div><div class="d"><strong>Carregar é o que demora</strong><span>Clipe de 3 s em 832×480: 341 s no total, sendo ~30 s de geração. Gerar vários na mesma chamada reaproveita os modelos carregados.</span></div></div>
+  <div class="phase"><div class="tag">Próximo</div><div class="d"><strong>1344×768 e 5 s com a GPU livre</strong><span>Os prompts de <code>exemplos/prompts.txt</code> ainda serão gerados no tamanho maior, com a máquina sem outros renders.</span></div></div>
+  <div class="phase"><div class="tag">Próximo</div><div class="d"><strong>Personagem e primeiro quadro</strong><span>Os modos ref2va (imagens de referência) e fl2va (primeiro e último quadro) já têm workflow; falta testar no DGX.</span></div></div>
+</div></section>
+
+<footer>
+  <div class="wrap">
+    <div class="pill">Pika H3 Flex</div><div class="pill">MiniMax H3</div><div class="pill">ComfyUI</div><div class="pill">DGX Spark</div>
+    <p style="margin-top:18px">Pika H3 Flex no DGX · os LoRAs são da Pika (licença comunitária do MiniMax H3) ·
+      <a href="https://github.com/inematds/pika-h3-flex">inematds/pika-h3-flex</a> ·
+      <a href="https://inema.club">INEMA.CLUB</a></p>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var KEY='pika-h3-flex-theme';
+    var b=document.body, t=document.getElementById('themeToggle');
+    try{ if(localStorage.getItem(KEY)==='light'){ b.classList.add('light'); t.textContent='☀️'; } }catch(e){}
+    t.addEventListener('click',function(){
+      var light=b.classList.toggle('light');
+      t.textContent=light?'☀️':'🌙';
+      try{ localStorage.setItem(KEY, light?'light':'dark'); }catch(e){}
+    });
+  })();
+</script>
+</body>
+</html>
