@@ -14,7 +14,7 @@ html(){ # html <idioma> <LANGSEL> <sufixo>
     | $T -o guia/corpo.$3.html > $L/pika-traduz-html-$3.log 2>&1
 }
 md(){ # md <idioma> <titulo-secao> <sufixo>
-  { printf 'Traduza para %s. %s Título da seção "## O que é" vira "%s". O link do guia vira https://inematds.github.io/pika-h3-flex/guia/%s/ e o banner vira guia/assets/banner-%s.jpg.\n\n' "$1" "$REGRA_MD" "$2" "$3" "$3"; cat README.md; } \
+  { printf 'Traduza para %s. %s Título da seçêo "## O que é" vira "%s". O link do guia vira https://inematds.github.io/pika-h3-flex/guia/%s/ e o banner vira guia/assets/banner-%s.jpg.\n\n' "$1" "$REGRA_MD" "$2" "$3" "$3"; cat README.md; } \
     | $T -o README.$3.md > $L/pika-traduz-md-$3.log 2>&1
 }
 html "INGLÊS (EUA)" '<a href="../">PT</a><a class="on" href="./">EN</a><a href="../es/">ES</a>' en &

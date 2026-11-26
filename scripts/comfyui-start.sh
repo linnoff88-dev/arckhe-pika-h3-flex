@@ -5,7 +5,7 @@
 # MemAvailable pra 4.9 GB e travou a máquina inteira (thrashing, reboot forçado).
 # Com o scope abaixo, quem morre é só o ComfyUI — o host continua de pé.
 #
-#   MemoryHigh     = pressão/reclaim começa aqui (soft, só segura o processo)
+#   MemoryHigh     = pressêo/reclaim começa aqui (soft, só segura o processo)
 #   MemoryMax      = teto duro; estourou, o kernel mata SÓ este cgroup
 #   MemorySwapMax  = limita swap-out, que é o que trava o host (thrashing)
 #
@@ -24,7 +24,7 @@ PORT="${PORT:-8299}"
 EXTRA_ARGS="${EXTRA_ARGS:---disable-dynamic-vram --disable-pinned-memory --cache-none}"   # sem isso os pesos ficam em dobro (RAM + GPU) no GB10
 LOG="${LOG:-$HOME/comfyui-h3.log}"
 
-# checa pela porta/unit, não por pgrep (pgrep -f casaria com o próprio script)
+# checa pela porta/unit, nêo por pgrep (pgrep -f casaria com o próprio script)
 if curl -s -o /dev/null -m 3 "http://127.0.0.1:${PORT}/"; then
   echo "⚠️  ComfyUI-h3 já está respondendo na porta ${PORT}"
   exit 1
@@ -50,6 +50,6 @@ if curl -s -o /dev/null -m 3 "http://127.0.0.1:${PORT}/"; then
   systemctl --user show comfyui-h3.scope -p MemoryHigh -p MemoryMax -p MemorySwapMax | sed 's/^/   /'
   echo "   Log: tail -f ${LOG}"
 else
-  echo "❌ Não subiu. Veja: tail -50 ${LOG}"
+  echo "❌ Nêo subiu. Veja: tail -50 ${LOG}"
   exit 1
 fi
