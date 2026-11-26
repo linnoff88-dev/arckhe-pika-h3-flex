@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Monta guia/index.html (e en/, es/) a partir do template INEMA + corpo.<lang>.html + exemplos.
+"""Monta guia/index.html (e en/, es/) a partir do template ARCKHÉ + corpo.<lang>.html + exemplos.
 
 Uso: python3 guia/montar.py [pt|en|es ...]   (sem argumento: os que tiverem corpo)
 """

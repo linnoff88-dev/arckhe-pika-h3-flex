@@ -1,6 +1,6 @@
 # Pika H3 Flex on DGX
 
-[![Pika H3 Flex on DGX](guia/assets/banner-en.jpg)](https://inematds.github.io/pika-h3-flex/guia/en/)
+[![Pika H3 Flex on DGX](guia/assets/banner-en.jpg)](https://linnoff88-dev.github.io/arckhe-/guia/en/)
 
 **🇧🇷 [Português](README.md) · 🇺🇸 [English](README.en.md) · 🇪🇸 [Español](README.es.md)**
 
@@ -10,7 +10,7 @@ A kit for running **Pika H3 Flex** on your own computer, without the cloud or pa
 
 ## 📖 User guide
 
-Complete guide (landing page + walkthrough): **https://inematds.github.io/pika-h3-flex/guia/en/**
+Complete guide (landing page + walkthrough): **https://linnoff88-dev.github.io/arckhe-/guia/en/**
 
 ## The process, start to finish
 
@@ -84,4 +84,4 @@ More ready-to-use prompts (gaucho on the pampas, humanoid robot, coastal storm, 
 - Tested on 11/09/2026 on the DGX Spark with ComfyUI 0.33.0.
 
 ---
-**INEMA.CLUB** — https://inema.club
+**ARCKHÉ AI** — https://ARCKHÉ AI
